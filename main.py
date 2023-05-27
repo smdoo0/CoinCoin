@@ -60,21 +60,27 @@ def signup():
         return render_template('signup_new.html')
 
 
-@app.route('/afterlogin')
+@app.route('/afterlogin', methods=['GET','POST'])
 def afterlogin():
+    username = session['username']
     if request.method == 'POST':
         username = session['username']
         
     else:
-        return render_template('main_after_login.html') 
+        return render_template('main_after_login.html', value = username) 
 
 @app.route('/mypage')
 def mypage():
+    username = session['username']
+    user_info = collection.find_one({"_id":username})
+    coin = user_info["coin"]
+    money = user_info["money"]
+    
     if request.method == 'POST':
         username = session['username']
         
     else:
-        return render_template('mypage.html') 
+        return render_template('mypage.html', username=username, coin = coin, money = money) 
     
 @app.route('/buycoin')
 def buycoin():
@@ -89,7 +95,55 @@ def sellcoin():
         username = session['username']
     else:
         return render_template('main_after_login.html') 
+
+@app.route('/add_money', methods=['GET','POST'])
+def add_money():
+    username = session['username']
+    user_info = collection.find_one({"_id":username})
+    coin = user_info["coin"]
+    money = user_info["money"]
     
+    if request.method == 'POST' :
+        add_money = int(request.form['addmoney'])
+        if add_money<1:
+            flash("1원보다 적은 금액은 입금할 수 없습니다!")
+            return redirect(url_for('add_money')) 
+        else:
+            money += add_money
+            collection.update_one({"_id": username}, {"$set": { "money": money } })
+            flash("{}원이 정상적으로 입금되었습니다!".format(add_money))
+            return redirect(url_for('mypage')) 
+            
+    else:
+        return render_template('add_money.html', username=username, coin = coin, money = money)
+    
+
+@app.route('/withdraw', methods=['GET','POST'])
+def withdraw():
+    username = session['username']
+    user_info = collection.find_one({"_id":username})
+    coin = user_info["coin"]
+    money = user_info["money"]
+    
+    if request.method == 'POST' :
+        withdraw = int(request.form['withdraw'])
+        if withdraw<1:
+            flash("1원보다 적은 금액은 출금할 수 없습니다!")
+            return redirect(url_for('withdraw')) 
+        elif money<withdraw:
+            flash("계좌 잔액보다 많은 금액은 출금할 수 없습니다!")
+            return redirect(url_for('withdraw')) 
+        
+        else:
+            money -= withdraw
+            collection.update_one({"_id": username}, {"$set": { "money": money } })
+            flash("{}원이 정상적으로 출금되었습니다!".format(withdraw))
+            return redirect(url_for('mypage')) 
+            
+    else:
+        return render_template('withdraw.html', username=username, coin = coin, money = money)
+  
+
 
 # @app.route('/success')
 # def success():

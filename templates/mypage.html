@@ -20,7 +20,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 	</head>
-	<body class="is-preload right-sidebar">
+	<body class="is-preload homepage">
 		<form action = "http://localhost:5000/mypage" method ="post">
 		<div id="page-wrapper">
 
@@ -30,8 +30,8 @@
 
 						<!-- Logo -->
 							<div id="logo">
-								<h1><a href="http://localhost:5000/">Coin</a></h1>
-								<span></span>
+								<h1><a href="http://localhost:5000/afterlogin">Coin</a></h1>
+								<span>Login as {{username}}</span>
 							</div>
 
 						<!-- Nav -->
@@ -49,40 +49,28 @@
 				</div>
 
 			<!-- Main -->
-				<div id="main-wrapper">
+				<div id="features-wrapper">
 					<div class="container">
 						<div class="row gtr-200">
-							<div class="col-8 col-12-medium">
+							<div style='margin-top : 0px; padding-top : 32px  ' class="col-8 col-12-medium">
 								<div id="content">
+										<div id="banner-wrapper">
+											<div id="banner" class="box container" style = 'padding-top : 60px'>
+												<div class="row">
+													<div class="col-7 col-12-medium">
+														<h2 style='margin-bottom : 45px'>{{username}} 님</h2>
 
-									<!-- Content -->
-										<article>
+														<h3 style='margin-bottom : 10px '>현재 계좌 잔액</h3>
+														<p style='margin-bottom : 40px '>{{money}}원</p>
+													
+														<h3 style='margin-bottom : 10px '>현재 보유 코인</h3>
+														<p>{{coin}}개</p>
 
-											<h2>회원 정보</h2>
-
-											<p>Phasellus quam turpis, feugiat sit amet ornare in, hendrerit in lectus.
-											Praesent semper mod quis eget mi. Etiam eu ante risus. Aliquam erat volutpat.
-											Aliquam luctus et mattis lectus sit amet pulvinar. Nam turpis nisi
-											consequat etiam lorem ipsum dolor sit amet nullam.</p>
-
-											<h3>More intriguing information</h3>
-											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac quam risus, at tempus
-											justo. Sed dictum rutrum massa eu volutpat. Quisque vitae hendrerit sem. Pellentesque lorem felis,
-											ultricies a bibendum id, bibendum sit amet nisl. Mauris et lorem quam. Maecenas rutrum imperdiet
-											vulputate. Nulla quis nibh ipsum, sed egestas justo. Morbi ut ante mattis orci convallis tempor.
-											Etiam a lacus a lacus pharetra porttitor quis accumsan odio. Sed vel euismod nisi. Etiam convallis
-											rhoncus dui quis euismod. Maecenas lorem tellus, congue et condimentum ac, ullamcorper non sapien.
-											Donec sagittis massa et leo semper a scelerisque metus faucibus. Morbi congue mattis mi.
-											Phasellus sed nisl vitae risus tristique volutpat. Cras rutrum commodo luctus.</p>
-
-											<p>Phasellus odio risus, faucibus et viverra vitae, eleifend ac purus. Praesent mattis, enim
-											quis hendrerit porttitor, sapien tortor viverra magna, sit amet rhoncus nisl lacus nec arcu.
-											Suspendisse laoreet metus ut metus imperdiet interdum aliquam justo tincidunt. Mauris dolor urna,
-											fringilla vel malesuada ac, dignissim eu mi. Praesent mollis massa ac nulla pretium pretium.
-											Maecenas tortor mauris, consectetur pellentesque dapibus eget, tincidunt vitae arcu.
-											Vestibulum purus augue, tincidunt sit amet iaculis id, porta eu purus.</p>
-
-										</article>
+													</div>
+													
+												</div>
+											</div>
+										</div>
 
 								</div>
 							</div>
@@ -91,25 +79,13 @@
 
 									<!-- Sidebar -->
 										<section>
-											<h3>Account</h3>
-											<p>계좌에 돈을 입/출금할 수 있어요.</p>
-											<h5>입금하기</h5>
-												<a href="#" class="button icon solid fa-info-circle">Add Money</a></li>
-											<br>
-											<h5>출금하기</h5>
-												<a href="#" class="button icon solid fa-info-circle">Withdraw</a></li>
-										</section>
-
-										<section>
-											<h3>Subheading</h3>
-											<ul class="style2">
-												<li><a href="#">Amet turpis, feugiat et sit amet</a></li>
-												<li><a href="#">Ornare in hendrerit in lectus</a></li>
-												<li><a href="#">Semper mod quis eget mi dolore</a></li>
-												<li><a href="#">Quam turpis feugiat sit dolor</a></li>
-												<li><a href="#">Amet ornare in hendrerit in lectus</a></li>
-												<li><a href="#">Semper mod quisturpis nisi</a></li>
-											</ul>
+											<h3 style='padding-bottom : 0px; margin-bottom : 5px;'>Account</h3>
+											<p style = 'margin-bottom : 20px;'>계좌에 돈을 입/출금할 수 있어요.</p>
+											<h3 style='padding-bottom : 0px; margin-bottom : 5px;'>입금하기</h3>
+												<a href="http://localhost:5000/add_money" class="button icon solid fa-info-circle">Add Money</a></li>
+											
+											<h3 style='margin-top : 20px ; margin-bottom : 5px;' >출금하기</h3>
+												<a href="http://localhost:5000/withdraw" class="button icon solid fa-info-circle">Withdraw</a></li>
 										</section>
 
 								</div>
