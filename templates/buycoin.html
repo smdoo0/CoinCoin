@@ -1,0 +1,141 @@
+{%with messages = get_flashed_messages()%}
+{%if messages %}
+<script type="text/javascript">
+	alert("{{messages[-1]}}");
+</script>
+{%endif%}
+{%endwith%}
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>CoinCoin</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body class="is-preload homepage">
+	
+		<div id="page-wrapper">
+
+			<!-- Header -->
+			<div id="header-wrapper">
+				<header id="header" class="container">
+
+					<!-- Logo -->
+					<div id="logo">
+						<h1><a href="http://localhost:5000/main_after_login">Coin</a></h1>
+						<span>{{ username }}</span>
+					</div>
+
+					<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="http://localhost:5000/main_after_login">Mainpage</a></li>
+							<li><a href="#">Coin State</a></li>
+							<li class="current"><a href="http://localhost:5000/buycoin">Buy Coin</a></li>
+							<li><a href="http://localhost:5000/sellcoin">Sell Coin</a></li>
+							<li><a href="http://localhost:5000/mypage">Mypage</a></li>
+							<li><a href="http://localhost:5000/logout">Logout</a></li>
+
+				</header>
+			</div>
+
+            <!-- Main -->
+            <div id="main-wrapper" style='padding-bottom : 70px'>
+                <div class="container">
+                    <div class="row gtr-200">
+                        <div class="col-8 col-12-medium">
+                            <div id="content">
+
+                                <!-- Content -->
+                                    <article>
+
+                                        <h2>marketplace에서 사기 </h2>
+                                        <h2>marketplace 코인 개수 : {{initial_number}} </h2>
+
+										<form action="http://localhost:5000/buycoin_initial" method="post">
+
+                                        <h5 style='margin-bottom : 10px' >구매할 coin 개수 : </h5>
+                                        <div style = 'display: flex; height : 50px'>
+                                            <input style='width : 350px; margin-right : 20px; border: solid gray' type = "text" name = 'initialbuy' />
+                                            <input style='padding : 0px 10px 0px 10px' type = "submit" value = "구매" />
+                                        </div>
+										</form>
+
+                                    </article>
+
+                            </div>
+                        </div>
+                        <div class="col-4 col-12-medium">
+                            <div id="sidebar">
+                                <div class="row">
+                                    <div class="col-7 col-12-medium">
+                                        <h2 style='margin-bottom : 40px'>{{username}} 님</h2>
+
+                                        <h3 style='margin-bottom : 10px '>현재 계좌 잔액</h3>
+                                        <p style='margin-bottom : 40px '>{{money}}원</p>
+                                    
+                                        <h3 style='margin-bottom : 10px '>현재 보유 코인</h3>
+                                        <p>{{coin}}개</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>	
+        <!-- Features -->
+				<div id="features-wrapper">
+					<div class="container">
+						<div class="row">
+                            {% for ml in post_list %}
+
+							<div class="col-4 col-12-medium">
+
+								<!-- Box -->
+									<section class="box feature">
+										<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+										<div class="inner">
+											<header>
+												<form action="http://localhost:5000/buycoin_post" method="post">
+													<h2>Post #{{loop.index}}</h2>
+													
+													{% for key, value in ml.items() %}
+														{% if key == "_id" %}
+															<input type="hidden"  name="buypostid" value={{ value }}>
+														{% endif %}
+											
+														<p>	 {{ key }} : {{ value }}  </p>
+													{% endfor %}
+													
+													<button type="button" onclick="this.parentNode.submit()">Go to that link!</button>
+													
+												</form>
+
+										</header>
+										</div>
+									</section>
+
+							</div>
+                            {% endfor %}
+						</div>
+					</div>
+				</div>
+			
+
+		<!-- Scripts -->
+
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.dropotron.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+
+	
+</body>
+
+</html>
