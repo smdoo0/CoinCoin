@@ -1,7 +1,7 @@
 from flask import Flask, redirect, url_for, render_template,request, abort, flash, session
 from bson.objectid import ObjectId
 from pymongo import MongoClient
-cluster = MongoClient("mongodb+srv://hysol:lab6120!@cluster0.saxyuac.mongodb.net/?retryWrites=true&w=majority")
+cluster = MongoClient("mongodb+srv://smdoo:Me2sChTXYh49P3Lk@cluster0.ydrdzo1.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["software_engineering"]
 collection = db["test"]
 #초기 코인 정보 db
@@ -27,7 +27,7 @@ def login():
         if collection.find_one({"_id":request.form['id']}):
             id = request.form['id']
             id_list = collection.find_one({"_id":id})
-            if request.form['pw'] == id_list['password']:
+            if request.form['password'] == id_list['pw']:
                 session['username'] = id
                 flash('You have logged in successfully as {}'.format(id))
                 return redirect(url_for('afterlogin'))
@@ -126,7 +126,8 @@ def buycoin_initial():
         else:
             money -= initial_buy*100
             initial_number -= initial_buy
-            collection.update_one({"_id": username}, {"$set": { "money": money, "coin":  coin+initial_buy} })
+            coin += initial_buy
+            collection.update_one({"_id": username}, {"$set": { "money": money, "coin":  coin} })
             initialCoin.update_one({"_id": 'initialCoin'},{"$set": { "number": initial_number} })
             flash("{}개의 코인을 정상적으로 구매하셨습니다!".format(initial_buy))
             
@@ -206,13 +207,14 @@ def sellcoin():
     username = session.get('username')
     user_list = collection.find_one({"_id":username}) # 현재 로그인 된 유저의 정보
     user_coins = user_list['coin']                # 유저의 보유 코인 개수
+    user_money = user_list['money']               # 유저의 잔액
     if request.method == 'POST':
         number = int(request.form.get('number'))  #판매할 코인 개수
         price = int(request.form.get('price'))   #판매할 코인의 개당 가격
 
         if user_coins < number:
             flash("판매하려는 코인 개수가 보유 수량보다 많습니다.")
-            return render_template('sellcoin.html', username=username, user_coins=user_coins)
+            return render_template('sellcoin.html', username=username, user_coins=user_coins, user_money=user_money)
         
         # postedCoin db에 정보 저장
         coin_info = {"Seller": username, "Quantity": number, "Price/coin": price}
@@ -220,9 +222,9 @@ def sellcoin():
         user_coins -= number
         collection.update_one({"_id": username}, {"$set": {"coin":  user_coins} })
         flash("정상적으로 post 되었습니다!")
-        return render_template('sellcoin.html', username=username, user_coins=user_coins)
+        return render_template('sellcoin.html', username=username, user_coins=user_coins, user_money=user_money)
     else:
-        return render_template('sellcoin.html', username=username, user_coins=user_coins)
+        return render_template('sellcoin.html', username=username, user_coins=user_coins, user_money=user_money)
 
 #입금
 @app.route('/add_money', methods=['GET','POST'])
