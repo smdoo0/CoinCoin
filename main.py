@@ -217,7 +217,8 @@ def sellcoin():
             return render_template('sellcoin.html', username=username, user_coins=user_coins, user_money=user_money)
         
         # postedCoin db에 정보 저장
-        coin_info = {"Seller": username, "Quantity": number, "Price/coin": price}
+        total_price = number * price
+        coin_info = {"Seller": username, "Quantity": number, "Price/coin": price, "total_price": total_price}
         postedCoin.insert_one(coin_info)
         user_coins -= number
         collection.update_one({"_id": username}, {"$set": {"coin":  user_coins} })
