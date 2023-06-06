@@ -26,7 +26,7 @@
 
                <!-- Logo -->
                <div id="logo">
-                  <h1><a href="http://localhost:5000/main_after_login">Coin</a></h1>
+                  <h1><a href="http://localhost:5000/afterlogin">Coin</a></h1>
                   <span>Login as {{ username }}</span>
                </div>
 
@@ -34,7 +34,6 @@
                <nav id="nav">
                   <ul>
                      <li><a href="http://localhost:5000/afterlogin">Mainpage</a></li>
-                     <li><a href="http://localhost:5000/coinstate">Coin State</a></li>
                      <li><a href="http://localhost:5000/buycoin_initial">Buy Coin</a></li>
                      <li class="current"><a href="http://localhost:5000/sellcoin">Sell Coin</a></li>
                      <li><a href="http://localhost:5000/mypage">Mypage</a></li>
@@ -86,27 +85,6 @@
 				</div>	
 			</div>
 
-         <!-- Banner -->
-         <div id="banner-wrapper">
-            <div id="banner" class="box container">
-               <div class="row">
-                  <div class="col-7 col-12-medium">
-                     <article>
-                        <p>판매할 코인 수량 : <input type="text" name="number" /></p>
-                        <p>개당 가격 : <input type="text" name="price" /></p>
-                        <h1>보유 코인 : {{ user_coins }}</h1>
-                     </article>
-                  </div>
-                  <div class="col-5 col-12-medium">
-                     <ul>
-                        <li><input type="submit" class="button large icon solid fa-arrow-circle-right"
-                              value="POST" />
-                        </li>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-         </div>
          <!-- Scripts -->
 
          <script src="assets/js/jquery.min.js"></script>
