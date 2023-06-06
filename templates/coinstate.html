@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<!--
+	Verti by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>CoinCoin</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body class="is-preload homepage">
+    <form action="http://localhost:5000" method="post">
+        <div id="page-wrapper">
+
+            <!-- Header -->
+            <div id="header-wrapper">
+                <header id="header" class="container">
+
+                    <!-- Logo -->
+                    <div id="logo">
+                        <h1><a href="index.html">Coin</a></h1>
+                        <span>by HH</span>
+                    </div>
+
+                    <!-- Nav -->
+                    <nav id="nav">
+                        <ul>
+                            <li><a href="http://localhost:5000/">Mainpage</a></li>
+                            <li class="current"><a href="http://localhost:5000/coinstate">Coin State</a></li>
+                            <li><a href="http://localhost:5000/loginfirst">Buy Coin</a></li>
+                            <li><a href="http://localhost:5000/loginfirst">Sell Coin</a></li>
+                            <li><a href="http://localhost:5000/login">Login</a></li>
+                        </ul>
+                    </nav>
+
+                </header>
+            </div>
+
+            <!-- Banner -->
+            <div id="banner-wrapper">
+                <div id="banner" class="box container">
+                    <div class="row">
+                        <div class="col-7 col-12-medium">
+                            <canvas id="coin-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/jquery.dropotron.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+
+        <script>
+            // 그래프 데이터 준비
+            var coinData = [
+                { date: '2023-05-20', price: 100 },
+                { date: '2023-05-21', price: 120 },
+                { date: '2023-05-22', price: 90 },
+                // 추가 데이터
+            ];
+
+            // 그래프 그리기
+            document.addEventListener("DOMContentLoaded", function () {
+                var ctx = document.getElementById("coin-chart").getContext("2d");
+
+                // 날짜와 가격 데이터 분리
+                var dates = coinData.map(item => item.date);
+                var prices = coinData.map(item => item.price);
+
+                var chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: '가격',
+                            data: prices,
+                            fill: false,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: '날짜'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: '가격'
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+
+
+    </form>
+</body>
+
+</html>

@@ -276,6 +276,11 @@ def withdraw():
     else:
         return render_template('withdraw.html', username=username, coin = coin, money = money)
   
+  
+@app.route('/coinstate')
+def coinstate():
+    
+    return render_template('coinstate.html')
 
 
 #회원전용기능 알림 메세지
