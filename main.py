@@ -270,42 +270,57 @@ def buycoin():
                 initialCoin.update_one({"_id": 'IC'},{"$set": { "number": initial_number} })
                 flash("{}개의 코인을 정상적으로 구매하셨습니다!".format(initial_buy))
                 return redirect(url_for('mypage'))
-        
+
         # 유저가 post한 코인을 구매하는 경우
         # 1. 게시물 total_price가 보유 금액보다 비싸다면 구매 불가
         # 2. 구매 가능하면 유저 코인 개수와 잔고, seller 코인 개수와 잔고, post 정보 업데이트
         for i in range(1, post_index+1):
-            txt = 'buy_posted_coin{}'.format(i)
-            if txt in request.form:  #i번 째 버튼이 눌렸다면
+            buy_posted_coin_index = 'buy_posted_coin{}'.format(i)
+            cancel_posted_coin_index = 'cancel{}'.format(i)
+            if buy_posted_coin_index in request.form:  # i번 째 구매 버튼이 눌렸다면
                 post_index_to_buy = i  # 클릭한 버튼의 post_index 값
                 post_to_buy = postedCoin.find_one({"post_index": post_index_to_buy}) # 구매하고자 하는 post 정보
                 quantity_to_buy = post_to_buy["Quantity"]
                 total_price_to_buy = post_to_buy["total_price"]
                 seller_name_of_post = post_to_buy["Seller"]
-            
+
                 seller_list = collection.find_one({"_id": seller_name_of_post})
                 seller_coin = seller_list["coin"]
                 seller_money = seller_list["money"]
-            
+
                 if money < total_price_to_buy:
                     flash("잔액이 부족합니다")
                     return render_template('buycoin.html', username=username, initial_number=initial_number, documents=post_list, coin=coin, money=money)
                 else:
                     money -= total_price_to_buy
-                    coin += quantity_to_buy        #구매한 유저의 잔액, 코인 개수 업데이트
-                    collection.update_one({"_id": username}, {"$set": { "money": money, "coin":  coin} })
-                
+                    coin += quantity_to_buy  # 구매한 유저의 잔액, 코인 개수 업데이트
+                    collection.update_one({"_id": username}, {"$set": {"money": money, "coin":  coin}})
+
                     seller_money += total_price_to_buy
-                    seller_coin -= quantity_to_buy       #판매한 유저의 잔액, 코인 개수 업데이트
-                    collection.update_one({"_id": seller_name_of_post}, {"$set": { "money": seller_money} })
-                
-                    postedCoin.delete_one({"post_index": post_index_to_buy})  #거래 완료된 post 삭제
+                    seller_coin -= quantity_to_buy  # 판매한 유저의 잔액, 코인 개수 업데이트
+                    collection.update_one({"_id": seller_name_of_post}, {"$set": {"money": seller_money, "coin": seller_coin}})
+
+                    postedCoin.delete_one({"post_index": post_index_to_buy})  # 거래 완료된 post 삭제
                     now = datetime.now()
                     now_datetime =  "{}/{} {}시 {}분".format(now.month, now.day, now.hour, now.minute)
-                    history.insert_one({"Price/coin": post_to_buy["Price/coin"], "Quantity": quantity_to_buy, "date":now_datetime})
-                
+                    history.insert_one({"Price/coin": post_to_buy["Price/coin"], "Quantity": quantity_to_buy, "date": now_datetime})
+
                     flash("거래 성공!")
                     return redirect(url_for('mypage'))
+            elif cancel_posted_coin_index in request.form:  # i번 째 삭제 버튼이 눌렸다면
+                post_index_to_cancel = i  # 클릭한 버튼의 post_index 값
+                post_to_cancel = postedCoin.find_one({"post_index": post_index_to_cancel})  # 취소하고자 하는 post 정보
+                coin_to_return = post_to_cancel["Quantity"]
+                seller_name_of_post = post_to_cancel["Seller"]
+
+                seller_list = collection.find_one({"_id": seller_name_of_post})
+                seller_coin = seller_list["coin"]
+                seller_coin += coin_to_return
+                
+                postedCoin.delete_one({"post_index": post_index_to_cancel})  # post 삭제
+                collection.update_one({"_id": username}, {"$set": {"coin": seller_coin}}) #유저 정보 업데이트
+                flash("게시물이 삭제되었습니다.")
+                return redirect(url_for('mypage'))
             
     
     else:

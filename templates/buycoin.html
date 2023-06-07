@@ -103,8 +103,14 @@
 										<p>판매 개수 : {{ document.Quantity }}</p>
 										<P>총 가격 : {{ document.total_price }}</P>
 									</header>
-									<input style='padding : 0px 10px 0px 10px' type="submit" name="buy_posted_coin{{ document.post_index }}"
-										value="구매{{ document.post_index }}" />
+									{% if document.Seller == username %}
+									<input style='padding : 0px 10px 0px 10px' type="submit"
+										name="cancel{{ document.post_index }}" value="삭제" />
+									{% else %}
+									<input style='padding : 0px 10px 0px 10px' type="submit"
+										name="buy_posted_coin{{ document.post_index }}"
+										value="구매" />
+									{% endif %}
 								</div>
 							</section>
 						</div>
