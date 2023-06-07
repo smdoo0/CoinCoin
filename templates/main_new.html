@@ -55,8 +55,8 @@
 				<div id="banner" class="box container">
 					<div class="row">
 						<div class="col-7 col-12-medium">
-							<h2>코인 가격 변동 그래프</h2>
-							<canvas id="coin-chart" width="800" height="400"></canvas>
+							<h2>코인 시세</h2>
+							<canvas id="coin-chart"></canvas>
 						</div>
 					</div>
 				</div>
@@ -72,18 +72,27 @@
 		<script src="assets/js/main.js"></script>
 
 
-		<!-- 그래프 그리는 스크립트 -->
 		<script>
 			// 그래프 데이터 준비
-			var coinData = JSON.parse('{{ graphdata | safe }}'); // 데이터를 JSON 형식으로 변환하여 할당
+			var coinData = JSON.parse('{{ graphdata | tojson | safe }}');
 
 			// 그래프 그리기
 			document.addEventListener("DOMContentLoaded", function () {
-				var ctx = document.getElementById("coin-chart").getContext("2d");
+				var container = document.getElementById("banner");
+				var canvas = document.createElement("canvas");
+				container.appendChild(canvas);
+				var ctx = canvas.getContext("2d");
 
-				// 날짜와 가격 데이터 분리
-				var dates = coinData.map(item => item.date_x);
-				var prices = coinData.map(item => item.price_y);
+				// 캔버스 가로 크기 설정
+				canvas.width = container.offsetWidth;
+
+				// 캔버스 세로 크기 설정
+				var chartHeight = 500; // 그래프의 세로 크기를 지정하세요
+				canvas.height = chartHeight;
+
+				// 날짜와 가격 데이터 분리 및 역순으로 처리
+				var dates = coinData.map(item => item[0]).reverse();
+				var prices = coinData.map(item => item[1]).reverse();
 
 				var chart = new Chart(ctx, {
 					type: 'line',
@@ -98,6 +107,9 @@
 						}]
 					},
 					options: {
+						responsive: true, // 캔버스 크기에 반응하도록 설정
+						maintainAspectRatio: true, // 캔버스 비율을 유지하도록 설정
+						aspectRatio: container.offsetWidth / chartHeight, // 캔버스의 비율을 지정
 						scales: {
 							x: {
 								display: true,
@@ -118,6 +130,7 @@
 				});
 			});
 		</script>
+
 		<!-- Footer -->
 		<div id="footer-wrapper">
 			<footer id="footer" class="container">

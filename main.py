@@ -25,20 +25,17 @@ def index():
     history_list = []
     graphdata = []
     for document in cursor:
-        data = {
-            "date_x": document["date"],
-            "price_y": document["Price/coin"]
-        }
+        data = [document["date"], document["Price/coin"]]
         history_list.append(data)
     
     if len(history_list) > 10:
         for i in range(1, 11):
-            graphdata.append(history_list[-i])    #최근 데이터 10개를 역순으로 저장
+            graphdata.append(history_list[-i])    #최근 데이터 10개를 저장
     else:
-        graphdata = history_list.reverse()        #모든 최근 데이터를 역순으로 저장
+        for i in range(len(history_list)):
+            graphdata.append(history_list[-(i+1)])  #모든 최근 데이터를 저장
     
-    graphdata_json = json.dumps(graphdata)
-    return render_template('main_new.html', graphdata=graphdata_json)
+    return render_template('main_new.html', graphdata=graphdata)
 
 #로그인
 @app.route('/login', methods = ['POST', 'GET'])
@@ -91,11 +88,24 @@ def signup():
 @app.route('/afterlogin', methods=['GET','POST'])
 def afterlogin():
     username = session['username']
-    if request.method == 'POST':
-        username = session['username']
-        
+    
+    # history에 있는 정보 받아오기
+    cursor = db.history.find()
+    history_list = []
+    graphdata = []
+    for document in cursor:
+        data = [document["date"], document["Price/coin"]]
+        history_list.append(data)
+    
+    if len(history_list) > 10:
+        for i in range(1, 11):
+            graphdata.append(history_list[-i])    #최근 데이터 10개를 저장
     else:
-        return render_template('main_after_login.html', value = username) 
+        for i in range(len(history_list)):
+            graphdata.append(history_list[-(i+1)])  #모든 최근 데이터를 저장
+    
+    
+    return render_template('main_after_login.html', value = username, graphdata=graphdata) 
 
 @app.route('/mypage')
 def mypage():
@@ -147,13 +157,13 @@ def buycoin():
             initial_buy = int(request.form['initialbuy'])   #구매하고자하는 초기 코인 개수
             if initial_buy <1:
                 flash("1개 이상의 코인을 입력해주세요.")
-                return render_template('buycoin.html', username=username, initial_number=initial_number, documents=post_list, coin=coin, money=money)
+                return redirect(url_for('afterlogin'))
             elif initial_buy > initial_number:
                 flash("마켓에 남아있는 코인이 부족합니다.")
-                return render_template('buycoin.html', username=username, initial_number=initial_number, documents=post_list, coin=coin, money=money)
+                return redirect(url_for('afterlogin'))
             elif money<initial_buy*100:
-                flash("계좌 잔액이 부족합니다!")
-                return render_template('buycoin.html', username=username, initial_number=initial_number, documents=post_list, coin=coin, money=money)
+                flash("잔액이 부족합니다")
+                return redirect(url_for('mypage'))
             else:
                 money -= initial_buy*100
                 initial_number -= initial_buy
@@ -182,15 +192,14 @@ def buycoin():
 
                 if money < total_price_to_buy:
                     flash("잔액이 부족합니다")
-                    return render_template('buycoin.html', username=username, initial_number=initial_number, documents=post_list, coin=coin, money=money)
+                    return redirect(url_for('mypage'))
                 else:
                     money -= total_price_to_buy
                     coin += quantity_to_buy  # 구매한 유저의 잔액, 코인 개수 업데이트
                     collection.update_one({"_id": username}, {"$set": {"money": money, "coin":  coin}})
 
-                    seller_money += total_price_to_buy
-                    seller_coin -= quantity_to_buy  # 판매한 유저의 잔액, 코인 개수 업데이트
-                    collection.update_one({"_id": seller_name_of_post}, {"$set": {"money": seller_money, "coin": seller_coin}})
+                    seller_money += total_price_to_buy       # 판매한 유저의 잔액 업데이트
+                    collection.update_one({"_id": seller_name_of_post}, {"$set": {"money": seller_money}})
 
                     postedCoin.delete_one({"post_index": post_index_to_buy})  # 거래 완료된 post 삭제
                     now = datetime.now()
