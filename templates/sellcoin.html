@@ -34,65 +34,67 @@
                <nav id="nav">
                   <ul>
                      <li><a href="http://localhost:5000/afterlogin">Mainpage</a></li>
-                     <li><a href="http://localhost:5000/buycoin_initial">Buy Coin</a></li>
+                     <li><a href="http://localhost:5000/buycoin">Buy Coin</a></li>
                      <li class="current"><a href="http://localhost:5000/sellcoin">Sell Coin</a></li>
                      <li><a href="http://localhost:5000/mypage">Mypage</a></li>
                      <li><a href="http://localhost:5000/logout">Logout</a></li>
             </header>
          </div>
          <!-- Main -->
-				<div id="main-wrapper" style='padding-bottom : 200px'>
-					<div class="container">
-						<div class="row gtr-200">
-							<div class="col-8 col-12-medium">
-								<div id="content">
+         <div id="main-wrapper" style='padding-bottom : 200px'>
+            <div class="container">
+               <div class="row gtr-200">
+                  <div class="col-8 col-12-medium">
+                     <div id="content">
 
-									<!-- Content -->
-										<article>
+                        <!-- Content -->
+                        <article>
 
-											<h2>판매 정보를 작성해주세요</h2>
+                           <h2>판매 정보를 작성해주세요</h2>
 
-											<h5 style='margin-bottom : 10px' >판매할 코인 수량 : </h5>
-                                 <input style='width : 350px; margin-right : 20px; border: solid gray' type = "text" name = 'number' />
-                                 <h5 style='margin-bottom : 10px' >개당 가격 : </h5>
-                                 <input style='width : 350px; margin-right : 20px; border: solid gray' type = "text" name = 'price' />
-											
-                                 <div style = 'display: flex; height : 50px'>
-												<input style='padding : 0px 10px 0px 10px' type = "submit" value = "Post" />
-											</div>
+                           <h5 style='margin-bottom : 10px'>판매할 코인 수량 : </h5>
+                           <input style='width : 350px; margin-right : 20px; border: solid gray' type="text"
+                              name='number' />
+                           <h5 style='margin-bottom : 10px'>개당 가격 : </h5>
+                           <input style='width : 350px; margin-right : 20px; border: solid gray' type="text"
+                              name='price' />
 
-										</article>
+                           <div style='display: flex; height : 50px'>
+                              <input style='padding : 0px 10px 0px 10px' type="submit" value="Post" />
+                           </div>
 
-								</div>
-							</div>
-							<div class="col-4 col-12-medium">
-								<div id="sidebar">
-									<div class="row">
-										<div class="col-7 col-12-medium">
-											<h2 style='margin-bottom : 40px'>{{username}} 님</h2>
+                        </article>
 
-											<h3 style='margin-bottom : 10px '>현재 계좌 잔액</h3>
-											<p style='margin-bottom : 40px '>{{user_money}}원</p>
-										
-											<h3 style='margin-bottom : 10px '>현재 보유 코인</h3>
-											<p>{{user_coins}}개</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>	
-			</div>
+                     </div>
+                  </div>
+                  <div class="col-4 col-12-medium">
+                     <div id="sidebar">
+                        <div class="row">
+                           <div class="col-7 col-12-medium">
+                              <h2 style='margin-bottom : 40px'>{{username}} 님</h2>
 
-         <!-- Scripts -->
+                              <h3 style='margin-bottom : 10px '>현재 계좌 잔액</h3>
+                              <p style='margin-bottom : 40px '>{{user_money}}원</p>
 
-         <script src="assets/js/jquery.min.js"></script>
-         <script src="assets/js/jquery.dropotron.min.js"></script>
-         <script src="assets/js/browser.min.js"></script>
-         <script src="assets/js/breakpoints.min.js"></script>
-         <script src="assets/js/util.js"></script>
-         <script src="assets/js/main.js"></script>
+                              <h3 style='margin-bottom : 10px '>현재 보유 코인</h3>
+                              <p>{{user_coins}}개</p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Scripts -->
+
+      <script src="assets/js/jquery.min.js"></script>
+      <script src="assets/js/jquery.dropotron.min.js"></script>
+      <script src="assets/js/browser.min.js"></script>
+      <script src="assets/js/breakpoints.min.js"></script>
+      <script src="assets/js/util.js"></script>
+      <script src="assets/js/main.js"></script>
 
    </form>
 </body>
